@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  ip-watcher:
+    image: ip-watcher-bot
+    build: .
+    container_name: ip-watcher
+    restart: unless-stopped
+    env_file:
+      - .env # pulls in DISCORD_TOKEN, NOTIFY_CHANNEL_ID, etc.
+    volumes:
+      - ./data:/app/data # persists last_ip.txt
