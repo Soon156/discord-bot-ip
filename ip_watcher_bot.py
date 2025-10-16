@@ -65,6 +65,7 @@ async def fetch_public_ip(session: aiohttp.ClientSession) -> Optional[str]:
 # ------------------------------------------------------------
 intents = discord.Intents.default()
 intents.guilds = True
+intents.messages = True
 bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
 
@@ -112,27 +113,12 @@ async def ip_monitor():
     else:
         log.debug("IP unchanged.")
 
-
-# ------------------------------------------------------------
-# Bot commands ----------------------------------------------------
-# ------------------------------------------------------------
-@bot.command(name="myip")
-async def myip(ctx: commands.Context):
-    """Reply with the current known public IP."""
-    ip = load_last_ip()
-    if ip:
-        await ctx.send(f"🌐 My current public IP is `{ip}`.")
-    else:
-        await ctx.send("❓ I haven't been able to retrieve the public IP yet. Try again soon.")
-
-
 # ------------------------------------------------------------
 # Bot events -------------------------------------------------------
 # ------------------------------------------------------------
 @bot.event
 async def on_ready():
     log.info(f"Logged in as {bot.user} (ID: {bot.user.id})")
-    channel = bot.get_channel(NOTIFY_CHANNEL_ID)
     if not ip_monitor.is_running():
         ip_monitor.start()
     log.info("IP monitor task started.")

@@ -4,7 +4,7 @@ __pycache__
 *.pyd
 .env
 *.env
-*.txt
+last_ip.txt
 data
 .git
 .gitignore
